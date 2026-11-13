@@ -1,0 +1,8 @@
+{
+ "extends": "configs/style_mild_5_epochs.json",
+ "override": {
+  "name": "style_mild_15_epochs",
+  "description": "style_mild_5_epochs' augmentation on the 15-epoch recipe (stochastic depth 0.1).",
+  "pagenet": {"version": "style_mild_15_epochs", "epochs": 15, "drop_path": 0.1}
+ }
+}

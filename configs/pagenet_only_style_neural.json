@@ -1,0 +1,103 @@
+{
+ "name": "pagenet_only_style_neural",
+ "description": "The page-network system: five chains, each reading its calibrated detector records, registered on the images and detected again (registration_images, detect.redetect), with the pair of page networks trained on all 224 public squeezes (configs/style_mild_5_epochs.json, configs/style_mild_15_epochs.json) from relit crops; each row decoded with the two-sided public and external (openly licensed text, decontaminated) language models and the per-squeeze cache, its final choice made with the neural character model fine-tuned on all 224 public transcripts (models/neural_lm_clean/all) mixed into the forward language model at the operating point's weight (combo.nn, decode.rescore); ROVER merges the five chains' transcripts.",
+ "alphabet": "ABCDEFGHIKLMNOPQRSTUWXYZ&:)",
+ "data": {"folds": "data/folds_public224.json"},
+ "detector": {
+  "_note": "Ultralytics 8.4.186, YOLO26-L OBB. page: letters are letter_px high in a page cut into tile x tile windows (also the network input size) overlapping by `overlap`; the first inference pass reads each view at 1/coarse_divisor of its size. train: chain k trains on the pack, mono1 and mono2 tiles of the squeezes outside fold k of data/folds_train181.json and monitors the pack tiles of fold k; every chain keeps the weights of epoch use_epoch, the highest held-out mAP50-95 of fold 0's chain over 100 epochs (ties earliest); `--epoch best` applies that rule to the chain's own held-out fold. batch 0.85 is Ultralytics' auto batch (fraction of GPU memory). infer: raw detections at conf, rotated NMS at nms_iou, then a registration and a 40 px page per view from the first pass; a view needs min_mono_detections detections for a detection-refined registration. fusion: cross-view weighted box fusion at wbf_iou, then Gaussian soft-NMS (no box is dropped). calibration: isotonic map of the fused score to P(letter), label = one-to-one match to an annotated Rotation1 letter at IoU >= match_iou, fitted on the other folds' out-of-fold detections.",
+  "run": "det_v2_yolo26_augfull",
+  "base_weights": "yolo26l-obb.pt",
+  "base_weights_sha256": "8674b0c24bf68aab5eb45009e0ac3808ce432237edf8cb5c50ae2191cb263a2b",
+  "base_weights_url": "https://github.com/ultralytics/assets/releases/download/v8.4.0/yolo26l-obb.pt",
+  "ultralytics": "8.4.186",
+  "page": {"letter_px": 40, "tile": 1280, "overlap": 0.25, "coarse_divisor": 3},
+  "train": {"epochs": 100, "batch": 0.85, "seed": 42, "max_det": 3000, "use_epoch": 59},
+  "infer": {"conf": 0.05, "nms_iou": 0.8, "max_det": 3000, "batch": 16, "min_mono_detections": 3},
+  "fusion": {"wbf_iou": 0.55, "soft_nms_iou": 0.5, "soft_nms_sigma": 0.5},
+  "calibration": {"match_iou": 0.5}
+ },
+ "dino": {
+  "_note": "Relit crops (dino.crops): squares of scale x the detection side, resized to size x size, cut from the relief of both views lit from three azimuths (trogs26.relief).",
+  "crop": {"size": 224, "scale": 1.6}
+ },
+ "lm": {
+  "_note": "PPM-C counts of order 12 over the transcripts of the 224 public squeezes, read at decode_max_order. Chain k's language model is built without fold k; pages outside the folds (TROGS-26) use the final one, over all 224 (lm/build.py). open: the counts of the external Greek text (lm/open.py: the openly licensed sources, decontaminated against every public and test squeeze by lm/decontaminate.py), read at max_order and mixed in at weight. two_sided: the final score of a proposed text reads every letter from both sides (lm/twosided.py).",
+  "order": 12,
+  "decode_max_order": 5,
+  "final": "public224_order12",
+  "oof": "public224_order12_exclude_f{fold}",
+  "open": {"name": "open_clean", "weight": 0.6, "max_order": 6},
+  "two_sided": true
+ },
+ "decode": {
+  "_note": "Rows: a token's keep probability is 1 - P(none); tokens kept at 0.5 are grouped into rows (organisers' v2 grouping), tokens with keep in [drop_below, 0.5) join the row they sit on within extras.span_margin letter heights, the rest are dropped (pagenet/decode.py). passes: proposal weightings of the beam search ({lam, beta, w}). cache: enabled false decodes every row once with the base language model; cache_ref (per variant) is the combo of the first pass that feeds the per-squeeze cache. gap: letter pitches beyond which the language model's context restarts. grids: the operating-point grid a variant names (decode/sweep.py); combo: its operating point, the grid point with the fewest out-of-fold Core errors. neural: the character model mixed into each row's final choice (decode/rescore.py) at the combo's weight nn.",
+  "beam": 256,
+  "char_topk": 8,
+  "k_hi": 0.95,
+  "extras": {"span_margin": 2.5},
+  "cache": {"enabled": true, "gamma": 0.2, "order": 5},
+  "passes": [
+   {"lam": 0.0, "beta": 0.0, "w": 1.0},
+   {"lam": 1.0, "beta": 0.0, "w": 1.0},
+   {"lam": 1.0, "beta": 2.5, "w": 2.0},
+   {"lam": 1.0, "beta": 3.5, "w": 2.0},
+   {"lam": 1.0, "beta": 3.0, "w": 3.0}
+  ],
+  "grids": {
+   "pn_two": {"lam": [0.3, 0.4, 0.5, 0.65, 0.8, 1.03], "w": [1.0, 2.0, 3.0, 4.0], "beta": [0.0, 1.0, 2.0, 3.0, 4.0],
+              "nn": [0.5, 0.6, 0.7, 0.8, 0.9]}
+  },
+  "variants": {
+   "P": {
+    "pagenet": ["style_mild_5_epochs_all_images", "style_mild_15_epochs_all_images"],
+    "grid": "pn_two",
+    "drop_below": 0.05,
+    "cache_ref": {"lam": 0.5, "w": 2.0, "beta": 2.0},
+    "combo": {"lam": 0.5, "w": 1.0, "beta": 1.0, "nn": 0.8},
+    "gap": 1.6,
+    "neural": {"model": "neural_lm_clean"}
+   }
+  }
+ },
+ "ensemble": {"members": ["P"], "rover": {"ins_frac": 0.4, "gap_weight": 1.0}},
+ "pagenet": {
+  "version": "style_mild_5_epochs",
+  "pretrained": "facebook/dinov3-vits16-pretrain-lvd1689m",
+  "pretrained_sha256": "4610ad75edef83e75afdebf162d148dc628045ea6cbb83d67d4708c709c4f91d",
+  "drop_path": 0.0,
+  "input": "relit",
+  "crop_size": 224,
+  "d": 384,
+  "layers": 4,
+  "heads": 6,
+  "dropout": 0.1,
+  "neighbours": 32,
+  "v_weight": 2.0,
+  "window": 384,
+  "core": 192,
+  "windows_per_step": 2,
+  "label_iou": 0.3,
+  "claim": "p",
+  "reader_iou": 0.5,
+  "blank_iou": 0.3,
+  "mask_prob": 0.15,
+  "reader_weight": 0.5,
+  "epochs": 5,
+  "lr_backbone": 5e-05,
+  "lr_head": 0.0005,
+  "weight_decay": 0.05,
+  "warmup": 0.05,
+  "augment": {
+   "gain": 0.2,
+   "bias": 0.08,
+   "rotation_degrees": 5,
+   "scale": [0.9, 1.1],
+   "relief": {"rig": 30, "tilt": 0.2, "fade": 0.3, "depth": [0.6, 1.3], "blur": 1.0, "noise": 0.02},
+   "shift": 0.04,
+   "erase": {"probability": 0.15, "area": [0.03, 0.12]}
+  },
+  "seed_base": 4200,
+  "read_batch": 256,
+  "read_views": [[0.0, 1.0], [-2.5, 1.0], [2.5, 1.0], [0.0, 0.95], [0.0, 1.05]]
+ }
+}

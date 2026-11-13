@@ -1,0 +1,7 @@
+{
+ "extends": "configs/pagenet_only_style_neural_oof.json",
+ "override": {
+  "name": "pagenet_only_style_neural_oof_open30",
+  "lm": {"open": {"weight": 0.3}}
+ }
+}

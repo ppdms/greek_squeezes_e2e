@@ -1,0 +1,8 @@
+{
+ "extends": "configs/pagenet_only_style_neural.json",
+ "override": {
+  "name": "pagenet_only_style_neural_oof",
+  "description": "pagenet_only_style_neural on the 224 public squeezes out of fold: chain k reads fold k with the pair trained on the other four folds, through the image-selected registration (chains/f{k}/oof/pagenet_style_mild_{5,15}_epochs_images.npz).",
+  "decode": {"variants": {"P": {"pagenet": ["style_mild_5_epochs_images", "style_mild_15_epochs_images"]}}}
+ }
+}

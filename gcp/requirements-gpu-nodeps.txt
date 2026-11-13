@@ -1,0 +1,2 @@
+# Installed with --no-deps after requirements-gpu.txt (see there): the detector's trainer and inference.
+ultralytics==8.4.186

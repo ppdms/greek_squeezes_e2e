@@ -1,0 +1,113 @@
+% The page network (fig:pagenet), drawn by hand in TikZ; report.tex inputs it inside the figure.
+%
+% Left: seven tokens of public squeeze IG_II2_493_Copy1, positions 2-8 of row 23 (cropN.jpg is position N): the crops
+% of fig:overview2, stage 6, extracted from figs/overview_back.pdf with `pdfimages -png` (its images 6-12). Their
+% first-choice letters are their transcript letters there: that stage outlines the first token of the row whose
+% first choice differs (position 18). Regenerating fig:overview2 from other assets does not update them.
+% Right: a schematic page, not a squeeze. Token centre (u, v), width, height (letter heights) and tilt (degrees);
+% `n` marks the 31 tokens that, with the query at the origin, are its 32 nearest under du^2 + (2 dv)^2. The ellipse
+% passes through the 32nd, at 5.55 (the 33rd is at 5.83).
+\definecolor{pnimage}{HTML}{2166AC}
+\definecolor{pnplace}{HTML}{1B9E77}
+\definecolor{pncontext}{HTML}{6A3D9A}
+\definecolor{pnmuted}{HTML}{8C8C8C}
+\def\pnneighbour{n}
+\begin{tikzpicture}[
+  x=1cm, y=1cm, line width=0.6pt, font=\footnotesize,
+  >={Stealth[length=1.5mm,width=1.2mm]},
+  flow/.style={->, draw=black!55},
+  block/.style={draw=#1!75!black, fill=#1!12, rounded corners=2pt, align=center, inner sep=2pt},
+  vector/.style={draw=#1!75!black, fill=#1!35, rounded corners=0.8pt, minimum width=0.78cm,
+                 minimum height=0.28cm, inner sep=0},
+  note/.style={font=\scriptsize, align=right, anchor=east, inner sep=0, text=black!80},
+  detail/.style={font=\scriptsize, text=black!80},
+  place/.style={block=pnplace, anchor=west, align=left, font=\scriptsize, text width=5.68cm, inner sep=2.5pt},
+]
+% ------------------------------------------------------------------------------------------------ the tokens' path
+\node[block=pnimage, anchor=south west, minimum width=7.63cm, minimum height=0.55cm] (encoder) at (2.35, 1.2)
+  {\textbf{Crop encoder}\enspace{\scriptsize DINOv3 ViT-S/16}};
+\node[draw=pncontext!75!black, fill=pncontext!4, rounded corners=3pt, anchor=south west, minimum width=7.63cm,
+      minimum height=1.9cm] (context) at (2.35, 3.0) {};
+\node[block=pncontext, minimum width=7.35cm, minimum height=0.55cm] (attention) at (6.165, 3.475)
+  {\textbf{Neighbour attention}\enspace{\scriptsize over $N(i)$, 6 heads}};
+\node[block=pnmuted, minimum width=7.35cm, minimum height=0.55cm] (ff) at (6.165, 4.425)
+  {\textbf{Feed-forward}\enspace{\scriptsize each token alone}};
+\foreach \p/\letter [count=\k] in {2/M, 3/W, 4/I, 5/E, 6/P, 7/A, 8/I} {
+  \pgfmathsetmacro\x{2.925+(\k-1)*1.08}
+  \node[inner sep=0, anchor=south, draw=black!25, line width=0.3pt] (crop\k) at (\x, 0)
+    {\includegraphics[width=0.95cm]{diagram/crop\p.jpg}};
+  \node[vector=pnimage] (e\k) at (\x, 2.12) {};
+  \node[draw=black!55, fill=white, rounded corners=1pt, minimum width=0.78cm, minimum height=0.42cm, inner sep=0,
+        font=\ttfamily\small] (out\k) at (\x, 5.35) {\letter};
+  \draw[flow] (crop\k.north) -- (\x, 1.2);
+  \draw[flow] (\x, 1.75) -- (e\k.south);
+  \draw[flow] (e\k.north) -- (attention.south -| \x, 0);
+  \draw[flow] (attention.north -| \x, 0) -- (ff.south -| \x, 0);
+  \draw[flow] (ff.north -| \x, 0) -- (out\k.south);
+}
+\draw[line width=1.1pt] (crop4.south west) rectangle (crop4.north east);
+\draw[line width=1.1pt] (out4.south west) rectangle (out4.north east);
+\node[font=\scriptsize, anchor=north, inner sep=1.5pt] at (crop4.south) {$i$};
+\node[font=\scriptsize] at (e4) {$e_i$};
+\node[detail] at (6.165, 5.95) {keep $k_i=1-P_i(\none{})$\qquad letter $\pi_i(a)=P_i(a)/k_i$};
+% ------------------------------------------------------------------------------------------------ left labels
+\node[note] at (2.2, 0.475) {one crop per\\detected box};
+\node[note] at (2.2, 2.12) {crop encoding};
+\node[note, text=pncontext!75!black, font=\Large] at (2.2, 4.1) {$\times4$};
+\node[note] at (2.2, 3.55) {context blocks};
+\node[note] at (2.2, 5.35) {$P_i$: 27 symbols\\and \none{}};
+% ------------------------------------------------------------------------------------------------ the place
+\node[place] (measure) at (10.44, 2.62) {18 measurements $f_i$ $\to$ MLP};
+\draw[draw=pnplace!75!black] (2.925, 2.62) -- (9.405, 2.62);
+\foreach \k in {1, ..., 7} {
+  \node[circle, draw=pnplace!75!black, fill=white, minimum size=0.26cm, inner sep=0] (plus\k) at (e\k |- 0, 2.62) {};
+  \draw[draw=pnplace!75!black, line width=0.5pt] (plus\k.north) -- (plus\k.south) (plus\k.east) -- (plus\k.west);
+}
+\draw[flow, draw=pnplace!75!black] (measure.west) -- (plus7.east);
+\node[place] (bias) at (10.44, 3.475)
+  {8 pair measurements $f_{ij}$ $\to$ MLP $B$:\\one attention bias per head};
+\draw[flow, draw=pnplace!75!black] (bias.west) -- (attention.east);
+\begin{scope}[shift={(13.38, 5.4)}, x=0.4cm, y=-0.4cm]
+  \fill[black!3, rounded corners=2pt] (-7.35, -2.95) rectangle (7.35, 2.95);
+  \begin{scope}
+    \clip[rounded corners=2pt] (-7.35, -2.95) rectangle (7.35, 2.95);
+    \foreach \tu/\tv/\tw/\tht/\tilt/\kind in {
+      -6.93/-2.85/0.79/0.96/-1/o, -5.71/-2.95/0.86/1.02/0/o, -4.54/-2.89/0.89/0.94/-1/o, -3.49/-2.95/0.92/1.00/-3/o,
+      -2.35/-2.91/0.77/0.94/0/o, -1.33/-2.89/0.83/0.94/3/o, -0.21/-2.94/0.89/0.95/-1/o, 1.01/-2.91/0.83/0.98/0/o,
+      2.03/-2.86/0.79/0.93/-1/o, 3.30/-2.88/0.82/0.98/-2/o, 4.38/-2.92/0.75/0.94/-3/o, 5.51/-2.85/0.88/0.95/-3/o,
+      6.69/-2.92/0.77/0.99/1/o, -6.56/-1.41/0.87/0.99/1/o, -5.47/-1.51/0.87/0.95/-3/o, -4.24/-1.44/0.75/0.98/-3/n,
+      -3.11/-1.48/0.91/0.99/-3/n, -2.08/-1.39/0.87/0.94/-1/n, -0.98/-1.50/0.85/1.00/-2/n, 0.19/-1.41/0.90/0.94/-3/n,
+      1.38/-1.47/0.77/1.02/-2/n, 2.46/-1.43/0.79/0.98/-2/n, 3.60/-1.48/0.79/1.02/-2/n, 4.65/-1.45/0.74/0.95/2/n,
+      5.88/-1.47/0.83/0.93/0/o, 6.87/-1.45/0.79/0.96/3/o, -6.69/0.03/0.90/0.96/3/o, -5.50/0.05/0.75/1.02/4/n,
+      -4.56/0.04/0.89/0.92/2/n, -3.31/0.03/0.75/1.04/-3/n, -2.32/0.05/0.83/0.94/-1/n, -1.10/-0.03/0.90/1.00/-1/n,
+      1.13/0.00/0.77/0.98/-3/n, 2.23/0.01/0.91/0.95/-3/n, 3.42/-0.04/0.78/0.98/-1/n, 4.58/-0.05/0.90/0.98/-3/n,
+      5.55/0.05/0.77/0.97/-4/n, 6.72/0.02/0.87/0.96/-1/o, -6.92/1.49/0.77/1.00/-4/o, -5.78/1.50/0.79/0.96/-4/o,
+      -4.56/1.45/0.78/0.99/-2/n, -3.44/1.44/0.75/0.95/-4/n, -2.34/1.40/0.83/0.99/-3/n, -1.25/1.47/0.91/1.03/4/n,
+      -0.15/1.45/0.82/0.94/1/n, 1.06/1.45/0.89/0.95/-1/n, 2.07/1.51/0.81/1.01/-3/n, 3.26/1.45/0.92/0.92/-2/n,
+      4.40/1.44/0.79/1.02/-1/n, 5.52/1.46/0.75/0.93/3/o, 6.65/1.41/0.92/1.02/0/o, -7.49/2.92/0.85/0.93/0/o,
+      -6.32/2.93/0.80/1.04/2/o, -5.30/2.95/0.85/1.03/-2/o, -4.03/2.93/0.81/0.96/1/o, -2.87/2.92/0.86/1.00/3/o,
+      -1.83/2.93/0.75/1.02/4/o, -0.71/2.91/0.91/0.99/3/o, 0.40/2.91/0.91/1.03/1/o, 1.52/2.91/0.82/0.96/-2/o,
+      2.59/2.87/0.91/0.97/3/o, 3.75/2.96/0.85/0.96/-1/o, 4.83/2.88/0.79/0.95/-1/o, 5.90/2.95/0.89/0.96/3/o,
+      7.02/2.91/0.85/1.03/4/o, 2.41/0.05/0.58/0.90/3/n, -3.27/-1.52/0.62/0.88/-2/n, 4.30/0.74/1.10/0.66/12/n} {
+      \ifx\kind\pnneighbour
+        \draw[pncontext, line width=0.3pt, opacity=0.55] (0, 0) -- (\tu, \tv);
+        \draw[draw=pncontext, fill=pncontext!15, fill opacity=0.8, line width=0.45pt, rotate around={\tilt:(\tu,\tv)}]
+          (\tu-\tw/2, \tv-\tht/2) rectangle (\tu+\tw/2, \tv+\tht/2);
+      \else
+        \draw[draw=pnmuted!70, line width=0.4pt, rotate around={\tilt:(\tu,\tv)}]
+          (\tu-\tw/2, \tv-\tht/2) rectangle (\tu+\tw/2, \tv+\tht/2);
+      \fi
+    }
+    \draw[pncontext, dashed, line width=0.5pt] (0, 0) ellipse [x radius=5.55, y radius=2.775];
+    \draw[line width=1.1pt, fill=white] (-0.42, -0.5) rectangle (0.42, 0.5);
+    \node[font=\scriptsize] at (0, 0) {$i$};
+  \end{scope}
+\end{scope}
+\node[detail] at (13.38, 6.81) {$N(i)$: the 32 nearest by $\Delta u^2+(2\Delta v)^2$};
+\draw[flow, draw=pnplace!75!black] (13.38, 4.22) -- node[right, detail] {$f_{ij},\ j\in N(i)$}
+  (bias.north -| 13.38, 0);
+% ------------------------------------------------------------------------------------------------ training only
+\node[place, draw=black!55, fill=none, dashed] (training) at (10.44, 0.85)
+  {\textit{Training only}\\crop-only classifier of $e_i$\\15\% of $e_i$ $\to$ learned placeholder};
+\draw[flow, dashed] (e7.east) -- (10.2, 2.12) |- (training.west);
+\end{tikzpicture}

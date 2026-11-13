@@ -1,0 +1,12 @@
+% Written by paper/make_results.py from the run outputs; do not edit.
+\begin{table}[htbp]\centering
+\begin{tabular}{@{}lrrr@{}}\toprule
+Evaluation set & Errors & Characters & Core \cer{} \\\midrule
+Public (224 squeezes) & 12{,}612 & 131{,}473 & \textbf{9.59\%} \\
+\quad Without \code{Merged} (208) & 7{,}935 & 96{,}628 & 8.21\% \\
+\quad No related squeeze in another fold (176) & 10{,}631 & 105{,}068 & 10.12\% \\
+TROGS-26 test (50 squeezes) & 1{,}464 & 15{,}862 & \textbf{9.23\%} \\\bottomrule
+\end{tabular}
+\caption{\textbf{Character error rates against both annotated views.} Public squeezes use one held-out chain each, and each fold is read at the weights chosen on the other four; test squeezes use readers trained on all public data and a vote over five chains. Public fold rates (0--4): 8.73\%, 9.92\%, 12.87\%, 9.01\%, 6.95\%.}
+\label{tab:results}
+\end{table}

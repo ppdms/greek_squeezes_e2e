@@ -1,0 +1,487 @@
+{
+ "note": "The 224 public squeezes (train, validation, internal_test) and the 50 TROGS-26 test squeezes (images only). train/validation/internal_test views are {base}_Rotation{1,2}_300dpi.png; TROGS-26 file names follow the release (HF dataset papadimas/trogs-26-test-images) and are listed under trogs26_files.",
+ "train": [
+  "Agora_I_4985",
+  "Agora_I_5477",
+  "IAS24115",
+  "IAS33117_Merged",
+  "IAS33118_Merged",
+  "IAS33126_Merged",
+  "IAS33148",
+  "IAS33161",
+  "IAS33162",
+  "IAS33166",
+  "IAS33214",
+  "IAS_27243",
+  "IAS_27262",
+  "IAS_27265",
+  "IAS_27268",
+  "IAS_27276",
+  "IAS_27288",
+  "IAS_27292_Merged",
+  "IAS_27294",
+  "IAS_27307",
+  "IG_II2_105_Merged",
+  "IG_II2_109b",
+  "IG_II2_111_Merged",
+  "IG_II2_112b",
+  "IG_II2_139",
+  "IG_II2_144b_Front",
+  "IG_II2_149_Copy2",
+  "IG_II2_1677_Copy3",
+  "IG_II2_1680_Copy1",
+  "IG_II2_1682a_Copy1",
+  "IG_II2_1683_Copy1",
+  "IG_II2_1685B1",
+  "IG_II2_1685B3",
+  "IG_II2_1685B5",
+  "IG_II2_1693_Copy2",
+  "IG_II2_1697a",
+  "IG_II2_1698a",
+  "IG_II2_1698b",
+  "IG_II2_1698c",
+  "IG_II2_1703",
+  "IG_II2_1705",
+  "IG_II2_1706a",
+  "IG_II2_1706c",
+  "IG_II2_1711_Merged",
+  "IG_II2_1718_Copy1",
+  "IG_II2_1719_Copy1",
+  "IG_II2_1736_Copy2",
+  "IG_II2_1739",
+  "IG_II2_1755",
+  "IG_II2_177",
+  "IG_II2_1794",
+  "IG_II2_179b_Copy2",
+  "IG_II2_17a",
+  "IG_II2_180",
+  "IG_II2_1803_Copy1",
+  "IG_II2_1806",
+  "IG_II2_1807",
+  "IG_II2_1815_Copy2",
+  "IG_II2_181_Copy1",
+  "IG_II2_1832a",
+  "IG_II2_189",
+  "IG_II2_191",
+  "IG_II2_1928",
+  "IG_II2_1929",
+  "IG_II2_1933_Copy1",
+  "IG_II2_1934a",
+  "IG_II2_1942",
+  "IG_II2_1946",
+  "IG_II2_195",
+  "IG_II2_1959",
+  "IG_II2_1967",
+  "IG_II2_1970_Merged",
+  "IG_II2_1971_Copy1",
+  "IG_II2_1973a",
+  "IG_II2_1973b_Copy2",
+  "IG_II2_1977",
+  "IG_II2_1978_Copy1",
+  "IG_II2_1981",
+  "IG_II2_1990_Merged",
+  "IG_II2_1993",
+  "IG_II2_1994",
+  "IG_II2_1997",
+  "IG_II2_1998",
+  "IG_II2_1_Copy2_Merged",
+  "IG_II2_2001",
+  "IG_II2_2004_Copy2",
+  "IG_II2_2006_Copy1",
+  "IG_II2_2008",
+  "IG_II2_2009",
+  "IG_II2_2010_Copy1",
+  "IG_II2_2021_Merged",
+  "IG_II2_2022a",
+  "IG_II2_2022b",
+  "IG_II2_2029",
+  "IG_II2_2032",
+  "IG_II2_2033",
+  "IG_II2_2035",
+  "IG_II2_2037B",
+  "IG_II2_2037C",
+  "IG_II2_2041A",
+  "IG_II2_2041B",
+  "IG_II2_2046_Copy1",
+  "IG_II2_2055_Copy2",
+  "IG_II2_2061a",
+  "IG_II2_2063",
+  "IG_II2_2065bA",
+  "IG_II2_2065bB",
+  "IG_II2_2068_Merged",
+  "IG_II2_206a",
+  "IG_II2_2081a",
+  "IG_II2_2081b_Copy1",
+  "IG_II2_2082",
+  "IG_II2_2088",
+  "IG_II2_2089b",
+  "IG_II2_2089d",
+  "IG_II2_2089g",
+  "IG_II2_2089h",
+  "IG_II2_2089i",
+  "IG_II2_2089k",
+  "IG_II2_2098",
+  "IG_II2_216a",
+  "IG_II2_216b",
+  "IG_II2_217",
+  "IG_II2_221_Copy2",
+  "IG_II2_227",
+  "IG_II2_232",
+  "IG_II2_233b",
+  "IG_II2_244bottom_Merged",
+  "IG_II2_244top_Merged",
+  "IG_II2_24c_Copy2",
+  "IG_II2_25_Copy2",
+  "IG_II2_284b",
+  "IG_II2_286",
+  "IG_II2_304",
+  "IG_II2_328",
+  "IG_II2_330_Merged",
+  "IG_II2_333c+e",
+  "IG_II2_334",
+  "IG_II2_335_Copy1",
+  "IG_II2_336a",
+  "IG_II2_337_Merged",
+  "IG_II2_342",
+  "IG_II2_343",
+  "IG_II2_345b",
+  "IG_II2_354a",
+  "IG_II2_354b",
+  "IG_II2_358_Copy1",
+  "IG_II2_360top",
+  "IG_II2_373",
+  "IG_II2_379_Copy1",
+  "IG_II2_398a",
+  "IG_II2_404",
+  "IG_II2_408a+b",
+  "IG_II2_409",
+  "IG_II2_411",
+  "IG_II2_414a",
+  "IG_II2_414b_Copy1",
+  "IG_II2_414b_Copy2",
+  "IG_II2_415",
+  "IG_II2_425",
+  "IG_II2_426",
+  "IG_II2_437_Copy1",
+  "IG_II2_457b_Copy2",
+  "IG_II2_46c",
+  "IG_II2_470b",
+  "IG_II2_471",
+  "IG_II2_472",
+  "IG_II2_478b",
+  "IG_II2_478c",
+  "IG_II2_486_Copy1",
+  "IG_II2_495_Copy1",
+  "IG_II2_498b_Copy1",
+  "IG_II2_550_Copy2",
+  "IG_II2_552",
+  "IG_II2_554_Copy1",
+  "IG_II2_559_Copy2",
+  "IG_II2_580_Copy1",
+  "IG_II2_5_Copy2",
+  "IG_II2_76a",
+  "IG_II2_80",
+  "IG_II2_96a+c+d"
+ ],
+ "validation": [
+  "IAS33147",
+  "IAS_27253",
+  "IAS_27281",
+  "IG_II2_1675_Copy2",
+  "IG_II2_1690",
+  "IG_II2_1708",
+  "IG_II2_1801_Copy2",
+  "IG_II2_1932",
+  "IG_II2_1976_Copy2",
+  "IG_II2_1995",
+  "IG_II2_2019",
+  "IG_II2_2034_Copy2",
+  "IG_II2_2073b",
+  "IG_II2_2089e",
+  "IG_II2_209_Copy1",
+  "IG_II2_264",
+  "IG_II2_336b",
+  "IG_II2_359",
+  "IG_II2_478a",
+  "IG_II2_511_Copy2",
+  "IG_II2_61",
+  "IG_II2_7_Copy1"
+ ],
+ "internal_test": [
+  "IAS33163",
+  "IAS_27272",
+  "IAS_27319",
+  "IG_II2_134",
+  "IG_II2_1682b_Copy1",
+  "IG_II2_1701",
+  "IG_II2_1723",
+  "IG_II2_1821",
+  "IG_II2_185_Copy2",
+  "IG_II2_1952b",
+  "IG_II2_1979",
+  "IG_II2_2005_Copy1",
+  "IG_II2_2061b+2093b",
+  "IG_II2_2089a",
+  "IG_II2_2155",
+  "IG_II2_230a",
+  "IG_II2_333a+b",
+  "IG_II2_350",
+  "IG_II2_42_Copy1",
+  "IG_II2_454",
+  "IG_II2_493_Copy1"
+ ],
+ "trogs26": [
+  "IAS_27083",
+  "IAS_27091",
+  "IAS_27093",
+  "IAS_27095",
+  "IAS_27109",
+  "IAS_27110",
+  "IAS_27114",
+  "IAS_27119",
+  "IAS_27131",
+  "IAS_27134",
+  "IAS_27138",
+  "IAS_27139",
+  "IAS_27144",
+  "IAS_27145",
+  "IAS_27146",
+  "IAS_27161",
+  "IAS_27177",
+  "IAS_27179",
+  "IAS_27183",
+  "IAS_27187",
+  "IAS_27188",
+  "IAS_27189",
+  "IAS_27191",
+  "IAS_27193",
+  "IAS_27194",
+  "IG_II2_2203b_Copy1",
+  "IG_II2_2203c",
+  "IG_II2_2222_Copy1",
+  "IG_II2_2229e+f",
+  "IG_II2_2272_Part2",
+  "IG_II2_2291a_fr_a",
+  "IG_II2_2291b_fr_a",
+  "IG_II2_2329",
+  "IG_II2_2337_Part2",
+  "IG_II2_2340a_Copy2",
+  "IG_II2_2342B_Copy1",
+  "IG_II2_2386",
+  "IG_II2_2408_Copy1",
+  "IG_II2_2436",
+  "IG_II2_2450",
+  "IG_II2_2464_Copy2",
+  "IG_II2_2491",
+  "IG_II2_2493a",
+  "IG_II2_2493c",
+  "IG_II2_2500c",
+  "IG_II2_2801",
+  "IG_II2_2809_Copy2",
+  "IG_II2_2820",
+  "IG_II2_3573",
+  "IG_II2_3604B"
+ ],
+ "trogs26_files": {
+  "IAS_27083": {
+   "Rotation1": "data/test/IAS_27083_Rotation1_300dpi.png",
+   "Rotation2": "data/test/IAS_27083_Rotation2_300dpi.png"
+  },
+  "IAS_27091": {
+   "Rotation1": "data/test/IAS_27091_Rotation1_300dpi.png",
+   "Rotation2": "data/test/IAS_27091_Merged_Rotation2_300dpi.png"
+  },
+  "IAS_27093": {
+   "Rotation1": "data/test/IAS_27093_Rotation1_300dpi.png",
+   "Rotation2": "data/test/IAS_27093_Rotation2_300dpi.png"
+  },
+  "IAS_27095": {
+   "Rotation1": "data/test/IAS_27095_Rotation1_300dpi.png",
+   "Rotation2": "data/test/IAS_27095_Rotation2_300dpi.png"
+  },
+  "IAS_27109": {
+   "Rotation1": "data/test/IAS_27109_Rotation1_300dpi.png",
+   "Rotation2": "data/test/IAS_27109_Rotation2_300dpi.png"
+  },
+  "IAS_27110": {
+   "Rotation1": "data/test/IAS_27110_Rotation1_300dpi.png",
+   "Rotation2": "data/test/IAS_27110_Rotation2_300dpi.png"
+  },
+  "IAS_27114": {
+   "Rotation1": "data/test/IAS_27114_Rotation1_300dpi.png",
+   "Rotation2": "data/test/IAS_27114_Rotation2_300dpi.png"
+  },
+  "IAS_27119": {
+   "Rotation1": "data/test/IAS_27119_Rotation1_300dpi.png",
+   "Rotation2": "data/test/IAS_27119_Merged_Rotation2_300dpi.png"
+  },
+  "IAS_27131": {
+   "Rotation1": "data/test/IAS_27131_Rotation1_300dpi.png",
+   "Rotation2": "data/test/IAS_27131_Rotation2_300dpi.png"
+  },
+  "IAS_27134": {
+   "Rotation1": "data/test/IAS_27134_Rotation1_300dpi.png",
+   "Rotation2": "data/test/IAS_27134_Rotation2_300dpi.png"
+  },
+  "IAS_27138": {
+   "Rotation1": "data/test/IAS_27138_Rotation1_300dpi.png",
+   "Rotation2": "data/test/IAS_27138_Rotation2_300dpi.png"
+  },
+  "IAS_27139": {
+   "Rotation1": "data/test/IAS_27139_Rotation1_300dpi.png",
+   "Rotation2": "data/test/IAS_27139_Rotation2_300dpi.png"
+  },
+  "IAS_27144": {
+   "Rotation1": "data/test/IAS_27144_Rotation1_300dpi.png",
+   "Rotation2": "data/test/IAS_27144_Rotation2_300dpi.png"
+  },
+  "IAS_27145": {
+   "Rotation1": "data/test/IAS_27145_Rotation1_300dpi.png",
+   "Rotation2": "data/test/IAS_27145_Rotation2_300dpi.png"
+  },
+  "IAS_27146": {
+   "Rotation1": "data/test/IAS_27146_Merged_Rotation1_300dpi.png",
+   "Rotation2": "data/test/IAS_27146_Merged_Rotation2_300dpi.png"
+  },
+  "IAS_27161": {
+   "Rotation1": "data/test/IAS_27161_Rotation1_300dpi.png",
+   "Rotation2": "data/test/IAS_27161_Rotation2_300dpi.png"
+  },
+  "IAS_27177": {
+   "Rotation1": "data/test/IAS_27177_Rotation1_300dpi.png",
+   "Rotation2": "data/test/IAS_27177_Rotation2_300dpi.png"
+  },
+  "IAS_27179": {
+   "Rotation1": "data/test/IAS_27179_Rotation1_300dpi.png",
+   "Rotation2": "data/test/IAS_27179_Rotation2_300dpi.png"
+  },
+  "IAS_27183": {
+   "Rotation1": "data/test/IAS_27183_Rotation1_300dpi.png",
+   "Rotation2": "data/test/IAS_27183_Rotation2_300dpi.png"
+  },
+  "IAS_27187": {
+   "Rotation1": "data/test/IAS_27187_Rotation1_300dpi.png",
+   "Rotation2": "data/test/IAS_27187_Rotation2_300dpi.png"
+  },
+  "IAS_27188": {
+   "Rotation1": "data/test/IAS_27188_Rotation1_300dpi.png",
+   "Rotation2": "data/test/IAS_27188_Rotation2_300dpi.png"
+  },
+  "IAS_27189": {
+   "Rotation1": "data/test/IAS_27189_Rotation1_300dpi.png",
+   "Rotation2": "data/test/IAS_27189_Rotation2_300dpi.png"
+  },
+  "IAS_27191": {
+   "Rotation1": "data/test/IAS_27191_Rotation1_300dpi.png",
+   "Rotation2": "data/test/IAS_27191_Rotation2_300dpi.png"
+  },
+  "IAS_27193": {
+   "Rotation1": "data/test/IAS_27193_Rotation1_300dpi.png",
+   "Rotation2": "data/test/IAS_27193_Rotation2_300dpi.png"
+  },
+  "IAS_27194": {
+   "Rotation1": "data/test/IAS_27194_Rotation1_300dpi.png",
+   "Rotation2": "data/test/IAS_27194_Rotation2_300dpi.png"
+  },
+  "IG_II2_2203b_Copy1": {
+   "Rotation1": "data/test/IG_II2_2203b_Copy1_Rotation1_300dpi.tif",
+   "Rotation2": "data/test/IG_II2_2203b_Copy1_Rotation2_300dpi.tif"
+  },
+  "IG_II2_2203c": {
+   "Rotation1": "data/test/IG_II2_2203c_Rotation1_300dpi.tif",
+   "Rotation2": "data/test/IG_II2_2203c_Rotation2_300dpi.tif"
+  },
+  "IG_II2_2222_Copy1": {
+   "Rotation1": "data/test/IG_II2_2222_Copy1_Rotation1_300dpi.tif",
+   "Rotation2": "data/test/IG_II2_2222_Copy1_Rotation2_300dpi.tif"
+  },
+  "IG_II2_2229e+f": {
+   "Rotation1": "data/test/IG_II2_2229e+f_Rotation1_300dpi.tif",
+   "Rotation2": "data/test/IG_II2_2229e+f_Rotation2_300dpi.tif"
+  },
+  "IG_II2_2272_Part2": {
+   "Rotation1": "data/test/IG_II2_2272_Part2_Rotation1_300dpi.tif",
+   "Rotation2": "data/test/IG_II2_2272_Part2_Rotation2_300dpi.tif"
+  },
+  "IG_II2_2291a_fr_a": {
+   "Rotation1": "data/test/IG_II2_2291a_fr_a_Rotation1_300dpi.tif",
+   "Rotation2": "data/test/IG_II2_2291a_fr_a_Rotation2_300dpi.tif"
+  },
+  "IG_II2_2291b_fr_a": {
+   "Rotation1": "data/test/IG_II2_2291b_fr_a_Rotation1_300dpi.tif",
+   "Rotation2": "data/test/IG_II2_2291b_fr_a_Rotation2_300dpi.tif"
+  },
+  "IG_II2_2329": {
+   "Rotation1": "data/test/IG_II2_2329_Rotation1_300dpi.tif",
+   "Rotation2": "data/test/IG_II2_2329_Rotation2_300dpi.tif"
+  },
+  "IG_II2_2337_Part2": {
+   "Rotation1": "data/test/IG_II2_2337_Part2_Rotation1_300dpi.tif",
+   "Rotation2": "data/test/IG_II2_2337_Part2_Rotation2_300dpi.tif"
+  },
+  "IG_II2_2340a_Copy2": {
+   "Rotation1": "data/test/IG_II2_2340a_Copy2_Rotation1_300dpi.tif",
+   "Rotation2": "data/test/IG_II2_2340a_Copy2_Rotation2_300dpi.tif"
+  },
+  "IG_II2_2342B_Copy1": {
+   "Rotation1": "data/test/IG_II2_2342B_Copy1_Rotation1_300dpi.tif",
+   "Rotation2": "data/test/IG_II2_2342B_Copy1_Rotation2_300dpi.tif"
+  },
+  "IG_II2_2386": {
+   "Rotation1": "data/test/IG_II2_2386_Rotation1_300dpi.tif",
+   "Rotation2": "data/test/IG_II2_2386_Rotation2_300dpi.tif"
+  },
+  "IG_II2_2408_Copy1": {
+   "Rotation1": "data/test/IG_II2_2408_Copy1_Rotation1_300dpi.tif",
+   "Rotation2": "data/test/IG_II2_2408_Copy1_Rotation2_300dpi.tif"
+  },
+  "IG_II2_2436": {
+   "Rotation1": "data/test/IG_II2_2436_Rotation1_300dpi.tif",
+   "Rotation2": "data/test/IG_II2_2436_Rotation2_300dpi.tif"
+  },
+  "IG_II2_2450": {
+   "Rotation1": "data/test/IG_II2_2450_Rotation1_300dpi.tif",
+   "Rotation2": "data/test/IG_II2_2450_Rotation2_300dpi.tif"
+  },
+  "IG_II2_2464_Copy2": {
+   "Rotation1": "data/test/IG_II2_2464_Copy2_Rotation1_300dpi.tif",
+   "Rotation2": "data/test/IG_II2_2464_Copy2_Rotation2_300dpi.tif"
+  },
+  "IG_II2_2491": {
+   "Rotation1": "data/test/IG_II2_2491_Rotation1_300dpi.tif",
+   "Rotation2": "data/test/IG_II2_2491_Rotation2_300dpi.tif"
+  },
+  "IG_II2_2493a": {
+   "Rotation1": "data/test/IG_II2_2493a_Rotation1_300dpi.tif",
+   "Rotation2": "data/test/IG_II2_2493a_Rotation2_300dpi.tif"
+  },
+  "IG_II2_2493c": {
+   "Rotation1": "data/test/IG_II2_2493c_Rotation1_300dpi.tif",
+   "Rotation2": "data/test/IG_II2_2493c_Rotation2_300dpi.tif"
+  },
+  "IG_II2_2500c": {
+   "Rotation1": "data/test/IG_II2_2500c_Rotation1_300dpi.tif",
+   "Rotation2": "data/test/IG_II2_2500c_Rotation2_300dpi.tif"
+  },
+  "IG_II2_2801": {
+   "Rotation1": "data/test/IG_II2_2801_Rotation1_300dpi.tif",
+   "Rotation2": "data/test/IG_II2_2801_Rotation2_300dpi.tif"
+  },
+  "IG_II2_2809_Copy2": {
+   "Rotation1": "data/test/IG_II2_2809_Copy2_Merged_Rotation1_300dpi.tif",
+   "Rotation2": "data/test/IG_II2_2809_Copy2_Rotation2_300dpi.tif"
+  },
+  "IG_II2_2820": {
+   "Rotation1": "data/test/IG_II2_2820_Merged_Rotation1_300dpi.tif",
+   "Rotation2": "data/test/IG_II2_2820_Rotation1_300dpi.tif"
+  },
+  "IG_II2_3573": {
+   "Rotation1": "data/test/IG_II2_3573_Rotation1_300dpi.tif",
+   "Rotation2": "data/test/IG_II2_3573_Merged_Rotation2_300dpi.tif"
+  },
+  "IG_II2_3604B": {
+   "Rotation1": "data/test/IG_II2_3604B_Rotation1_300dpi.tif",
+   "Rotation2": "data/test/IG_II2_3604B_Rotation2_300dpi.tif"
+  }
+ }
+}

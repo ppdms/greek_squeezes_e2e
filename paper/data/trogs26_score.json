@@ -1,0 +1,930 @@
+{
+ "evaluated_at_utc": "2026-11-13T17:09:04.796013+00:00",
+ "protocol": "One-time evaluation of frozen final ROVER transcripts; no test-driven retuning.",
+ "prediction_commit": "287b318",
+ "configuration": "configs/pagenet_only_style_neural.json",
+ "resolved_configuration": {
+  "name": "pagenet_only_style_neural",
+  "description": "The page-network system: five chains, each reading its calibrated detector records, registered on the images and detected again (registration_images, detect.redetect), with the pair of page networks trained on all 224 public squeezes (configs/style_mild_5_epochs.json, configs/style_mild_15_epochs.json) from relit crops; each row decoded with the two-sided public and external (openly licensed text, decontaminated) language models and the per-squeeze cache, its final choice made with the neural character model fine-tuned on all 224 public transcripts (models/neural_lm_clean/all) mixed into the forward language model at the operating point's weight (combo.nn, decode.rescore); ROVER merges the five chains' transcripts.",
+  "alphabet": "ABCDEFGHIKLMNOPQRSTUWXYZ&:)",
+  "data": {
+   "folds": "data/folds_public224.json"
+  },
+  "detector": {
+   "_note": "Ultralytics 8.4.186, YOLO26-L OBB. page: letters are letter_px high in a page cut into tile x tile windows (also the network input size) overlapping by `overlap`; the first inference pass reads each view at 1/coarse_divisor of its size. train: chain k trains on the pack, mono1 and mono2 tiles of the squeezes outside fold k of data/folds_train181.json and monitors the pack tiles of fold k; every chain keeps the weights of epoch use_epoch, the highest held-out mAP50-95 of fold 0's chain over 100 epochs (ties earliest); `--epoch best` applies that rule to the chain's own held-out fold. batch 0.85 is Ultralytics' auto batch (fraction of GPU memory). infer: raw detections at conf, rotated NMS at nms_iou, then a registration and a 40 px page per view from the first pass; a view needs min_mono_detections detections for a detection-refined registration. fusion: cross-view weighted box fusion at wbf_iou, then Gaussian soft-NMS (no box is dropped). calibration: isotonic map of the fused score to P(letter), label = one-to-one match to an annotated Rotation1 letter at IoU >= match_iou, fitted on the other folds' out-of-fold detections.",
+   "run": "det_v2_yolo26_augfull",
+   "base_weights": "yolo26l-obb.pt",
+   "base_weights_sha256": "8674b0c24bf68aab5eb45009e0ac3808ce432237edf8cb5c50ae2191cb263a2b",
+   "base_weights_url": "https://github.com/ultralytics/assets/releases/download/v8.4.0/yolo26l-obb.pt",
+   "ultralytics": "8.4.186",
+   "page": {
+    "letter_px": 40,
+    "tile": 1280,
+    "overlap": 0.25,
+    "coarse_divisor": 3
+   },
+   "train": {
+    "epochs": 100,
+    "batch": 0.85,
+    "seed": 42,
+    "max_det": 3000,
+    "use_epoch": 59
+   },
+   "infer": {
+    "conf": 0.05,
+    "nms_iou": 0.8,
+    "max_det": 3000,
+    "batch": 16,
+    "min_mono_detections": 3
+   },
+   "fusion": {
+    "wbf_iou": 0.55,
+    "soft_nms_iou": 0.5,
+    "soft_nms_sigma": 0.5
+   },
+   "calibration": {
+    "match_iou": 0.5
+   }
+  },
+  "dino": {
+   "_note": "Relit crops (dino.crops): squares of scale x the detection side, resized to size x size, cut from the relief of both views lit from three azimuths (trogs26.relief).",
+   "crop": {
+    "size": 224,
+    "scale": 1.6
+   }
+  },
+  "lm": {
+   "_note": "PPM-C counts of order 12 over the transcripts of the 224 public squeezes, read at decode_max_order. Chain k's language model is built without fold k; pages outside the folds (TROGS-26) use the final one, over all 224 (lm/build.py). open: the counts of the external Greek text (lm/open.py: the openly licensed sources, decontaminated against every public and test squeeze by lm/decontaminate.py), read at max_order and mixed in at weight. two_sided: the final score of a proposed text reads every letter from both sides (lm/twosided.py).",
+   "order": 12,
+   "decode_max_order": 5,
+   "final": "public224_order12",
+   "oof": "public224_order12_exclude_f{fold}",
+   "open": {
+    "name": "open_clean",
+    "weight": 0.6,
+    "max_order": 6
+   },
+   "two_sided": true
+  },
+  "decode": {
+   "_note": "Rows: a token's keep probability is 1 - P(none); tokens kept at 0.5 are grouped into rows (organisers' v2 grouping), tokens with keep in [drop_below, 0.5) join the row they sit on within extras.span_margin letter heights, the rest are dropped (pagenet/decode.py). passes: proposal weightings of the beam search ({lam, beta, w}). cache: enabled false decodes every row once with the base language model; cache_ref (per variant) is the combo of the first pass that feeds the per-squeeze cache. gap: letter pitches beyond which the language model's context restarts. grids: the operating-point grid a variant names (decode/sweep.py); combo: its operating point, the grid point with the fewest out-of-fold Core errors. neural: the character model mixed into each row's final choice (decode/rescore.py) at the combo's weight nn.",
+   "beam": 256,
+   "char_topk": 8,
+   "k_hi": 0.95,
+   "extras": {
+    "span_margin": 2.5
+   },
+   "cache": {
+    "enabled": true,
+    "gamma": 0.2,
+    "order": 5
+   },
+   "passes": [
+    {
+     "lam": 0.0,
+     "beta": 0.0,
+     "w": 1.0
+    },
+    {
+     "lam": 1.0,
+     "beta": 0.0,
+     "w": 1.0
+    },
+    {
+     "lam": 1.0,
+     "beta": 2.5,
+     "w": 2.0
+    },
+    {
+     "lam": 1.0,
+     "beta": 3.5,
+     "w": 2.0
+    },
+    {
+     "lam": 1.0,
+     "beta": 3.0,
+     "w": 3.0
+    }
+   ],
+   "grids": {
+    "pn_two": {
+     "lam": [
+      0.3,
+      0.4,
+      0.5,
+      0.65,
+      0.8,
+      1.03
+     ],
+     "w": [
+      1.0,
+      2.0,
+      3.0,
+      4.0
+     ],
+     "beta": [
+      0.0,
+      1.0,
+      2.0,
+      3.0,
+      4.0
+     ],
+     "nn": [
+      0.5,
+      0.6,
+      0.7,
+      0.8,
+      0.9
+     ]
+    }
+   },
+   "variants": {
+    "P": {
+     "pagenet": [
+      "style_mild_5_epochs_all_images",
+      "style_mild_15_epochs_all_images"
+     ],
+     "grid": "pn_two",
+     "drop_below": 0.05,
+     "cache_ref": {
+      "lam": 0.5,
+      "w": 2.0,
+      "beta": 2.0
+     },
+     "combo": {
+      "lam": 0.5,
+      "w": 1.0,
+      "beta": 1.0,
+      "nn": 0.8
+     },
+     "gap": 1.6,
+     "neural": {
+      "model": "neural_lm_clean"
+     }
+    }
+   }
+  },
+  "ensemble": {
+   "members": [
+    "P"
+   ],
+   "rover": {
+    "ins_frac": 0.4,
+    "gap_weight": 1.0
+   }
+  },
+  "pagenet": {
+   "version": "style_mild_5_epochs",
+   "pretrained": "facebook/dinov3-vits16-pretrain-lvd1689m",
+   "pretrained_sha256": "4610ad75edef83e75afdebf162d148dc628045ea6cbb83d67d4708c709c4f91d",
+   "drop_path": 0.0,
+   "input": "relit",
+   "crop_size": 224,
+   "d": 384,
+   "layers": 4,
+   "heads": 6,
+   "dropout": 0.1,
+   "neighbours": 32,
+   "v_weight": 2.0,
+   "window": 384,
+   "core": 192,
+   "windows_per_step": 2,
+   "label_iou": 0.3,
+   "claim": "p",
+   "reader_iou": 0.5,
+   "blank_iou": 0.3,
+   "mask_prob": 0.15,
+   "reader_weight": 0.5,
+   "epochs": 5,
+   "lr_backbone": 5e-05,
+   "lr_head": 0.0005,
+   "weight_decay": 0.05,
+   "warmup": 0.05,
+   "augment": {
+    "gain": 0.2,
+    "bias": 0.08,
+    "rotation_degrees": 5,
+    "scale": [
+     0.9,
+     1.1
+    ],
+    "relief": {
+     "rig": 30,
+     "tilt": 0.2,
+     "fade": 0.3,
+     "depth": [
+      0.6,
+      1.3
+     ],
+     "blur": 1.0,
+     "noise": 0.02
+    },
+    "shift": 0.04,
+    "erase": {
+     "probability": 0.15,
+     "area": [
+      0.03,
+      0.12
+     ]
+    }
+   },
+   "seed_base": 4200,
+   "read_batch": 256,
+   "read_views": [
+    [
+     0.0,
+     1.0
+    ],
+    [
+     -2.5,
+     1.0
+    ],
+    [
+     2.5,
+     1.0
+    ],
+    [
+     0.0,
+     0.95
+    ],
+    [
+     0.0,
+     1.05
+    ]
+   ]
+  }
+ },
+ "prediction_directory": "runs/pagenet_only_style_neural/trogs26/rover (frozen test outputs)",
+ "annotation_directory": "TROGS-26 test annotations (organisers' scorer)",
+ "annotation_views": 100,
+ "squeezes": 50,
+ "prediction_sha256": {
+  "IAS_27083_transcript.txt": "dd679522997de7c6f369ecb30d692ae035930ba6d544126996a2b8c25eafe050",
+  "IAS_27091_transcript.txt": "72829238ea6b5e793f7b6d9a5828c15bd918d3bd821acd8ba568825491cef858",
+  "IAS_27093_transcript.txt": "e028b41ff5605c4c1e55287456aeaeb73fd47b91a46cec232b63b672598e7d09",
+  "IAS_27095_transcript.txt": "756cc45c9b09c8359d99b2b04c155aae33a706ce2f7133fec0e144da649a4bc9",
+  "IAS_27109_transcript.txt": "17042f34b92b45a56dca1d50befbc51ef992b84975627f6db59b59dd58e49bcb",
+  "IAS_27110_transcript.txt": "5b118db0f723f113dbb446decabac7e74daf6b4f30abc54defd66f0ee4ea1252",
+  "IAS_27114_transcript.txt": "dacd4f8a5cf291b6d83f2b9b16c0d18eb2bf1b8787d0e3f6755b2a33b1d7e7a4",
+  "IAS_27119_transcript.txt": "6325f023b88632234523d81e8924136161968f7368e12a7ecd55f71426ade887",
+  "IAS_27131_transcript.txt": "8f9277210ab3695c7836d1db3a2ffeef4d27ac71c82e75c5a9a2d91af55135e7",
+  "IAS_27134_transcript.txt": "675b024dd3d7c8e189aafb5d3638435eef30828fb528538d286ad93e6d3cca57",
+  "IAS_27138_transcript.txt": "9adb862552803da66b1469a4b76cd319cc9e2b51e368a67051c4159c53b58d60",
+  "IAS_27139_transcript.txt": "e6ac595528560c97eb71f8b7f5556c4c613d1b6f8c1289dc380ca10cfedcd228",
+  "IAS_27144_transcript.txt": "6c9f7890bc330aef52777fb9b284e54e51d0e92d05c3ff06b53dcbf98b1eb723",
+  "IAS_27145_transcript.txt": "a6a333816644360a6646c0733ed41eee23cfbc2887512c0f697bf4a484a809f5",
+  "IAS_27146_transcript.txt": "6899a7424ec9da0ff24af40041303fee555885b3a77d38bf1fe5de7d51c40ba8",
+  "IAS_27161_transcript.txt": "d7df851306328d63a56affec86eb033c235181199ab62d3c7b31980d8dc4b498",
+  "IAS_27177_transcript.txt": "76d40823d26d88187743247c606e4466acb35c908dcd906175efb2ca022572d4",
+  "IAS_27179_transcript.txt": "4f3ca6e7dd06abd288617eb3d3e8e9ec2add0a1ec5b796aa5e31b8ae2f1cb460",
+  "IAS_27183_transcript.txt": "59bb9ef74d8b8ecbbac5d991d291fb69182c7c809f583dcbb019fa9706b21a83",
+  "IAS_27187_transcript.txt": "b5efc529034b0de917733ce7fa42b5f781f6284675da5df36ac53a7b041fd5dd",
+  "IAS_27188_transcript.txt": "2a0b67340823de68d45347b693dc00efa8d6c9721f30cc956d416173666f29e1",
+  "IAS_27189_transcript.txt": "4a8902d0bafda3be321c5145902a5bd843d5fa3ffe6cc4b5632975e40802ab5d",
+  "IAS_27191_transcript.txt": "e18bca05d27e8904c7bbcbc9be37389eea1b0323bffb06f0068671ddeb088ce2",
+  "IAS_27193_transcript.txt": "34c8cb1922eff8c85782b1733db162437172bf9f28f2ca890e45df6cc864e9fa",
+  "IAS_27194_transcript.txt": "8406e6398832d55d2c6c371ad819bd17005638db670a16d9d8f3eca30ebfa33c",
+  "IG_II2_2203b_Copy1_transcript.txt": "072e67dd83ad9ac1c75dbd1d31baaf0926a8bb4cdca3466a59eec8dc04defdd3",
+  "IG_II2_2203c_transcript.txt": "e6f9e8be2ff9a3db132de245ca98c1f12588783a79deda00d2de7926f71ca436",
+  "IG_II2_2222_Copy1_transcript.txt": "581be9d4ab62b02e1c2adfeffc798f2fc5be83e118daa9914bd305f23b01be24",
+  "IG_II2_2229e+f_transcript.txt": "ce60d5bfa3488d9464605d273eb717b50f38892cd0b8e7948c6bbd199049633d",
+  "IG_II2_2272_Part2_transcript.txt": "a2c07cd72119157189eba88480ae41dd43c2ce168179d51948a3c855dc4a4a1e",
+  "IG_II2_2291a_fr_a_transcript.txt": "bf8b636e2c603989cc5ab4725167cdb642f13079e4623b3bb1176d2b4a01e471",
+  "IG_II2_2291b_fr_a_transcript.txt": "c167dde282b93d2b0c5959835b4a2acd3a7cdf874623ed0d4bc723a57016d3d8",
+  "IG_II2_2329_transcript.txt": "38ae24be3c59794c2c8ad98653f134b873e2a7396045eefdbc4c023ef529a5c5",
+  "IG_II2_2337_Part2_transcript.txt": "2b4ac2423a235abf0f4a724b5a84d486848ccdf679284894e956839a5e773b2c",
+  "IG_II2_2340a_Copy2_transcript.txt": "3f3593c4e080174b8f7e363648c623e1e02f87e6a4c9e4997a5b630cda6b2fba",
+  "IG_II2_2342B_Copy1_transcript.txt": "2f6d8411a21baf40aa45280ab4eb51b5893d79c1c23864e9e53a28d439cb2e4f",
+  "IG_II2_2386_transcript.txt": "b916b51362fe1cec021c476ddc3b52d428e9ce70272778b50ca092de861c01af",
+  "IG_II2_2408_Copy1_transcript.txt": "780b57a5da18ef782d639eae9e521dd45dcc90d28623a1b336f258d7fd3f4e74",
+  "IG_II2_2436_transcript.txt": "61f70f83e360dc80a9d6c3e11a29373a1cc667474f45a4cfd2121715ffb5e379",
+  "IG_II2_2450_transcript.txt": "3b02eba8bd75119943fcd8bcbbe9808968897e82de01d8b0bc82eb19636cffb7",
+  "IG_II2_2464_Copy2_transcript.txt": "2dbf1295b7e0b0fa506cae7acf23c33cdde110ee2767c8c2325aa5464ac89ec0",
+  "IG_II2_2491_transcript.txt": "71a80c8fbebaa877a66a984b382b07ac27b1f94f882d232b13b100feaceb934a",
+  "IG_II2_2493a_transcript.txt": "c32622dabf97b03a9ca848cff7099286fd61b51ac75a5e513e97d623c00d7b82",
+  "IG_II2_2493c_transcript.txt": "687fb9622b4b5f68765d64d26e51765d2e4fec39f8decfe098fd6cbb94f63416",
+  "IG_II2_2500c_transcript.txt": "fbbe0a888962f82100ba1a219e52c40c330ab73a26dcde13bf9d34a3247f2a07",
+  "IG_II2_2801_transcript.txt": "7492b5784e09358472df52a441a1080357e51cee7a3309cb3be373c7814dafa2",
+  "IG_II2_2809_Copy2_transcript.txt": "ad56e97c5a20b8439c8dd206b3cdb5a518195c8038d06529e2b1543a5f499c38",
+  "IG_II2_2820_transcript.txt": "723727f296eb463ee423a895e36a5dadf78f327d9beadfefdb48826acdb70958",
+  "IG_II2_3573_transcript.txt": "8cc1b9fe73ec580d4012d9fb071a73962e7dc206cd66f6ad028f130dd03cb967",
+  "IG_II2_3604B_transcript.txt": "45feda0783d2d7208a36ffd68e7f161d55f6fd3f197b71d57d3e1eb54ecda5d6"
+ },
+ "errors": {
+  "cer": 1464,
+  "all": 2128,
+  "opt": 1282
+ },
+ "chars": {
+  "cer": 15862,
+  "all": 16944,
+  "opt": 16052
+ },
+ "cer": 0.092296053461102,
+ "all_cer": 0.125590179414542,
+ "opt_cer": 0.07986543732868179,
+ "missing": [],
+ "all_confident": [],
+ "per_squeeze": [
+  {
+   "squeeze": "IAS_27083",
+   "err": 40,
+   "char": 596,
+   "all_err": 86,
+   "all_char": 644,
+   "opt_err": 40,
+   "opt_char": 596,
+   "cer": 0.06711409395973154,
+   "all_cer": 0.13354037267080746,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IAS_27091",
+   "err": 10,
+   "char": 200,
+   "all_err": 10,
+   "all_char": 200,
+   "opt_err": 10,
+   "opt_char": 200,
+   "cer": 0.05,
+   "all_cer": 0.05,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IAS_27093",
+   "err": 14,
+   "char": 88,
+   "all_err": 14,
+   "all_char": 88,
+   "opt_err": 14,
+   "opt_char": 88,
+   "cer": 0.1590909090909091,
+   "all_cer": 0.1590909090909091,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IAS_27095",
+   "err": 0,
+   "char": 38,
+   "all_err": 0,
+   "all_char": 38,
+   "opt_err": 0,
+   "opt_char": 38,
+   "cer": 0.0,
+   "all_cer": 0.0,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IAS_27109",
+   "err": 44,
+   "char": 236,
+   "all_err": 56,
+   "all_char": 252,
+   "opt_err": 42,
+   "opt_char": 238,
+   "cer": 0.1864406779661017,
+   "all_cer": 0.2222222222222222,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IAS_27110",
+   "err": 6,
+   "char": 198,
+   "all_err": 14,
+   "all_char": 206,
+   "opt_err": 6,
+   "opt_char": 198,
+   "cer": 0.030303030303030304,
+   "all_cer": 0.06796116504854369,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IAS_27114",
+   "err": 48,
+   "char": 580,
+   "all_err": 94,
+   "all_char": 628,
+   "opt_err": 48,
+   "opt_char": 580,
+   "cer": 0.08275862068965517,
+   "all_cer": 0.14968152866242038,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IAS_27119",
+   "err": 4,
+   "char": 242,
+   "all_err": 18,
+   "all_char": 256,
+   "opt_err": 4,
+   "opt_char": 242,
+   "cer": 0.01652892561983471,
+   "all_cer": 0.0703125,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IAS_27131",
+   "err": 8,
+   "char": 290,
+   "all_err": 20,
+   "all_char": 302,
+   "opt_err": 8,
+   "opt_char": 290,
+   "cer": 0.027586206896551724,
+   "all_cer": 0.06622516556291391,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IAS_27134",
+   "err": 40,
+   "char": 280,
+   "all_err": 58,
+   "all_char": 302,
+   "opt_err": 38,
+   "opt_char": 282,
+   "cer": 0.14285714285714285,
+   "all_cer": 0.19205298013245034,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IAS_27138",
+   "err": 6,
+   "char": 212,
+   "all_err": 16,
+   "all_char": 226,
+   "opt_err": 4,
+   "opt_char": 214,
+   "cer": 0.02830188679245283,
+   "all_cer": 0.07079646017699115,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IAS_27139",
+   "err": 14,
+   "char": 166,
+   "all_err": 14,
+   "all_char": 174,
+   "opt_err": 12,
+   "opt_char": 168,
+   "cer": 0.08433734939759036,
+   "all_cer": 0.08045977011494253,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IAS_27144",
+   "err": 48,
+   "char": 642,
+   "all_err": 96,
+   "all_char": 694,
+   "opt_err": 46,
+   "opt_char": 644,
+   "cer": 0.07476635514018691,
+   "all_cer": 0.138328530259366,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IAS_27145",
+   "err": 60,
+   "char": 520,
+   "all_err": 96,
+   "all_char": 556,
+   "opt_err": 60,
+   "opt_char": 520,
+   "cer": 0.11538461538461539,
+   "all_cer": 0.17266187050359713,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IAS_27146",
+   "err": 176,
+   "char": 862,
+   "all_err": 216,
+   "all_char": 910,
+   "opt_err": 172,
+   "opt_char": 866,
+   "cer": 0.20417633410672853,
+   "all_cer": 0.23736263736263735,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IAS_27161",
+   "err": 382,
+   "char": 868,
+   "all_err": 382,
+   "all_char": 868,
+   "opt_err": 382,
+   "opt_char": 868,
+   "cer": 0.4400921658986175,
+   "all_cer": 0.4400921658986175,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IAS_27177",
+   "err": 2,
+   "char": 72,
+   "all_err": 2,
+   "all_char": 74,
+   "opt_err": 2,
+   "opt_char": 72,
+   "cer": 0.027777777777777776,
+   "all_cer": 0.02702702702702703,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IAS_27179",
+   "err": 4,
+   "char": 172,
+   "all_err": 6,
+   "all_char": 174,
+   "opt_err": 4,
+   "opt_char": 172,
+   "cer": 0.023255813953488372,
+   "all_cer": 0.034482758620689655,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IAS_27183",
+   "err": 20,
+   "char": 174,
+   "all_err": 24,
+   "all_char": 178,
+   "opt_err": 20,
+   "opt_char": 174,
+   "cer": 0.11494252873563218,
+   "all_cer": 0.1348314606741573,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IAS_27187",
+   "err": 2,
+   "char": 164,
+   "all_err": 6,
+   "all_char": 168,
+   "opt_err": 2,
+   "opt_char": 164,
+   "cer": 0.012195121951219513,
+   "all_cer": 0.03571428571428571,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IAS_27188",
+   "err": 4,
+   "char": 326,
+   "all_err": 4,
+   "all_char": 328,
+   "opt_err": 4,
+   "opt_char": 326,
+   "cer": 0.012269938650306749,
+   "all_cer": 0.012195121951219513,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IAS_27189",
+   "err": 4,
+   "char": 118,
+   "all_err": 4,
+   "all_char": 122,
+   "opt_err": 4,
+   "opt_char": 118,
+   "cer": 0.03389830508474576,
+   "all_cer": 0.03278688524590164,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IAS_27191",
+   "err": 8,
+   "char": 262,
+   "all_err": 8,
+   "all_char": 262,
+   "opt_err": 8,
+   "opt_char": 262,
+   "cer": 0.030534351145038167,
+   "all_cer": 0.030534351145038167,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IAS_27193",
+   "err": 8,
+   "char": 78,
+   "all_err": 10,
+   "all_char": 80,
+   "opt_err": 8,
+   "opt_char": 78,
+   "cer": 0.10256410256410256,
+   "all_cer": 0.125,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IAS_27194",
+   "err": 10,
+   "char": 122,
+   "all_err": 16,
+   "all_char": 128,
+   "opt_err": 10,
+   "opt_char": 122,
+   "cer": 0.08196721311475409,
+   "all_cer": 0.125,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IG_II2_2203b_Copy1",
+   "err": 10,
+   "char": 236,
+   "all_err": 24,
+   "all_char": 264,
+   "opt_err": 4,
+   "opt_char": 242,
+   "cer": 0.0423728813559322,
+   "all_cer": 0.09090909090909091,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IG_II2_2203c",
+   "err": 26,
+   "char": 504,
+   "all_err": 34,
+   "all_char": 536,
+   "opt_err": 14,
+   "opt_char": 516,
+   "cer": 0.051587301587301584,
+   "all_cer": 0.06343283582089553,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IG_II2_2222_Copy1",
+   "err": 60,
+   "char": 372,
+   "all_err": 84,
+   "all_char": 452,
+   "opt_err": 36,
+   "opt_char": 400,
+   "cer": 0.16129032258064516,
+   "all_cer": 0.18584070796460178,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IG_II2_2229e+f",
+   "err": 18,
+   "char": 226,
+   "all_err": 42,
+   "all_char": 266,
+   "opt_err": 10,
+   "opt_char": 234,
+   "cer": 0.07964601769911504,
+   "all_cer": 0.15789473684210525,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IG_II2_2272_Part2",
+   "err": 18,
+   "char": 448,
+   "all_err": 50,
+   "all_char": 494,
+   "opt_err": 12,
+   "opt_char": 454,
+   "cer": 0.04017857142857143,
+   "all_cer": 0.10121457489878542,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IG_II2_2291a_fr_a",
+   "err": 24,
+   "char": 480,
+   "all_err": 42,
+   "all_char": 532,
+   "opt_err": 10,
+   "opt_char": 494,
+   "cer": 0.05,
+   "all_cer": 0.07894736842105263,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IG_II2_2291b_fr_a",
+   "err": 8,
+   "char": 198,
+   "all_err": 10,
+   "all_char": 204,
+   "opt_err": 6,
+   "opt_char": 200,
+   "cer": 0.04040404040404041,
+   "all_cer": 0.049019607843137254,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IG_II2_2329",
+   "err": 14,
+   "char": 318,
+   "all_err": 38,
+   "all_char": 346,
+   "opt_err": 12,
+   "opt_char": 320,
+   "cer": 0.0440251572327044,
+   "all_cer": 0.10982658959537572,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IG_II2_2337_Part2",
+   "err": 20,
+   "char": 206,
+   "all_err": 40,
+   "all_char": 230,
+   "opt_err": 18,
+   "opt_char": 208,
+   "cer": 0.0970873786407767,
+   "all_cer": 0.17391304347826086,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IG_II2_2340a_Copy2",
+   "err": 10,
+   "char": 310,
+   "all_err": 26,
+   "all_char": 332,
+   "opt_err": 8,
+   "opt_char": 312,
+   "cer": 0.03225806451612903,
+   "all_cer": 0.0783132530120482,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IG_II2_2342B_Copy1",
+   "err": 28,
+   "char": 436,
+   "all_err": 30,
+   "all_char": 442,
+   "opt_err": 26,
+   "opt_char": 438,
+   "cer": 0.06422018348623854,
+   "all_cer": 0.06787330316742081,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IG_II2_2386",
+   "err": 22,
+   "char": 440,
+   "all_err": 32,
+   "all_char": 478,
+   "opt_err": 8,
+   "opt_char": 454,
+   "cer": 0.05,
+   "all_cer": 0.06694560669456066,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IG_II2_2408_Copy1",
+   "err": 14,
+   "char": 492,
+   "all_err": 38,
+   "all_char": 526,
+   "opt_err": 10,
+   "opt_char": 496,
+   "cer": 0.028455284552845527,
+   "all_cer": 0.07224334600760456,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IG_II2_2436",
+   "err": 14,
+   "char": 270,
+   "all_err": 16,
+   "all_char": 288,
+   "opt_err": 6,
+   "opt_char": 278,
+   "cer": 0.05185185185185185,
+   "all_cer": 0.05555555555555555,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IG_II2_2450",
+   "err": 8,
+   "char": 144,
+   "all_err": 18,
+   "all_char": 162,
+   "opt_err": 4,
+   "opt_char": 148,
+   "cer": 0.05555555555555555,
+   "all_cer": 0.1111111111111111,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IG_II2_2464_Copy2",
+   "err": 20,
+   "char": 520,
+   "all_err": 40,
+   "all_char": 556,
+   "opt_err": 14,
+   "opt_char": 526,
+   "cer": 0.038461538461538464,
+   "all_cer": 0.07194244604316546,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IG_II2_2491",
+   "err": 16,
+   "char": 376,
+   "all_err": 44,
+   "all_char": 412,
+   "opt_err": 12,
+   "opt_char": 380,
+   "cer": 0.0425531914893617,
+   "all_cer": 0.10679611650485436,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IG_II2_2493a",
+   "err": 84,
+   "char": 320,
+   "all_err": 88,
+   "all_char": 408,
+   "opt_err": 46,
+   "opt_char": 360,
+   "cer": 0.2625,
+   "all_cer": 0.21568627450980393,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IG_II2_2493c",
+   "err": 34,
+   "char": 420,
+   "all_err": 50,
+   "all_char": 442,
+   "opt_err": 32,
+   "opt_char": 422,
+   "cer": 0.08095238095238096,
+   "all_cer": 0.11312217194570136,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IG_II2_2500c",
+   "err": 0,
+   "char": 108,
+   "all_err": 0,
+   "all_char": 108,
+   "opt_err": 0,
+   "opt_char": 108,
+   "cer": 0.0,
+   "all_cer": 0.0,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IG_II2_2801",
+   "err": 2,
+   "char": 180,
+   "all_err": 18,
+   "all_char": 196,
+   "opt_err": 2,
+   "opt_char": 180,
+   "cer": 0.011111111111111112,
+   "all_cer": 0.09183673469387756,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IG_II2_2809_Copy2",
+   "err": 2,
+   "char": 82,
+   "all_err": 2,
+   "all_char": 82,
+   "opt_err": 2,
+   "opt_char": 82,
+   "cer": 0.024390243902439025,
+   "all_cer": 0.024390243902439025,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IG_II2_2820",
+   "err": 36,
+   "char": 796,
+   "all_err": 64,
+   "all_char": 840,
+   "opt_err": 28,
+   "opt_char": 804,
+   "cer": 0.04522613065326633,
+   "all_cer": 0.0761904761904762,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IG_II2_3573",
+   "err": 12,
+   "char": 192,
+   "all_err": 18,
+   "all_char": 198,
+   "opt_err": 12,
+   "opt_char": 192,
+   "cer": 0.0625,
+   "all_cer": 0.09090909090909091,
+   "all_confident": false
+  },
+  {
+   "squeeze": "IG_II2_3604B",
+   "err": 2,
+   "char": 282,
+   "all_err": 10,
+   "all_char": 292,
+   "opt_err": 2,
+   "opt_char": 284,
+   "cer": 0.0070921985815602835,
+   "all_cer": 0.03424657534246575,
+   "all_confident": false
+  }
+ ]
+}

@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.egg-info/
+.venv/
+.pytest_cache/
+.cloudflare/
+/work/
+paper/*.aux
+paper/*.log
+paper/*.out
+paper/*.fdb_latexmk
+paper/*.fls

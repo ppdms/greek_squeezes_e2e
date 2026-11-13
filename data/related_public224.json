@@ -1,0 +1,228 @@
+{
+ "kind": "related_public224",
+ "note": "Two squeezes are related when they share an identity. A squeeze named after IG II² has the numbers of its name (`IG_II2_2061b+2093b`: 2061 and 2093; fragments, copies and parts of one number share it); any other squeeze has the canonical identity of `<work>/phi_raw/exclusions.json`, the PHI exclusion manifest: for `Agora_I_*` the IG II² number of the Agora inventory concordance, for `IAS*` the Krateros record of its scan, else the first IG reference of the PHI texts its transcript matched (public squeezes: the annotation; TROGS-26: the system's unscored readings). A text match can be a formulaic parallel rather than the inscription itself, so it may relate squeezes that are not one inscription. Groups are the connected components over the public squeezes; data/related_public224.json lists those of two or more and the identities a TROGS-26 squeeze shares with a public one. ",
+ "identification": {
+  "file": "phi_raw/exclusions.json",
+  "sha256": "fc734282fdec9f709472a8500046ec19cdb07c87c033a329a292bcd17a612230"
+ },
+ "groups": [
+  {
+   "identities": [
+    "IG II^2 46"
+   ],
+   "squeezes": [
+    "Agora_I_4985",
+    "IG_II2_46c"
+   ]
+  },
+  {
+   "identities": [
+    "IG II^2 334"
+   ],
+   "squeezes": [
+    "Agora_I_5477",
+    "IG_II2_334"
+   ]
+  },
+  {
+   "identities": [
+    "IG V,1 407"
+   ],
+   "squeezes": [
+    "IAS_27265",
+    "IAS_27276"
+   ]
+  },
+  {
+   "identities": [
+    "IG II^2 1682"
+   ],
+   "squeezes": [
+    "IG_II2_1682a_Copy1",
+    "IG_II2_1682b_Copy1"
+   ]
+  },
+  {
+   "identities": [
+    "IG II^2 1685"
+   ],
+   "squeezes": [
+    "IG_II2_1685B1",
+    "IG_II2_1685B3",
+    "IG_II2_1685B5"
+   ]
+  },
+  {
+   "identities": [
+    "IG II^2 1698"
+   ],
+   "squeezes": [
+    "IG_II2_1698a",
+    "IG_II2_1698b",
+    "IG_II2_1698c"
+   ]
+  },
+  {
+   "identities": [
+    "IG II^2 1706"
+   ],
+   "squeezes": [
+    "IG_II2_1706a",
+    "IG_II2_1706c"
+   ]
+  },
+  {
+   "identities": [
+    "IG II^2 1973"
+   ],
+   "squeezes": [
+    "IG_II2_1973a",
+    "IG_II2_1973b_Copy2"
+   ]
+  },
+  {
+   "identities": [
+    "IG II^2 2022"
+   ],
+   "squeezes": [
+    "IG_II2_2022a",
+    "IG_II2_2022b"
+   ]
+  },
+  {
+   "identities": [
+    "IG II^2 2037"
+   ],
+   "squeezes": [
+    "IG_II2_2037B",
+    "IG_II2_2037C"
+   ]
+  },
+  {
+   "identities": [
+    "IG II^2 2041"
+   ],
+   "squeezes": [
+    "IG_II2_2041A",
+    "IG_II2_2041B"
+   ]
+  },
+  {
+   "identities": [
+    "IG II^2 2061",
+    "IG II^2 2093"
+   ],
+   "squeezes": [
+    "IG_II2_2061a",
+    "IG_II2_2061b+2093b"
+   ]
+  },
+  {
+   "identities": [
+    "IG II^2 2065"
+   ],
+   "squeezes": [
+    "IG_II2_2065bA",
+    "IG_II2_2065bB"
+   ]
+  },
+  {
+   "identities": [
+    "IG II^2 2081"
+   ],
+   "squeezes": [
+    "IG_II2_2081a",
+    "IG_II2_2081b_Copy1"
+   ]
+  },
+  {
+   "identities": [
+    "IG II^2 2089"
+   ],
+   "squeezes": [
+    "IG_II2_2089a",
+    "IG_II2_2089b",
+    "IG_II2_2089d",
+    "IG_II2_2089e",
+    "IG_II2_2089g",
+    "IG_II2_2089h",
+    "IG_II2_2089i",
+    "IG_II2_2089k"
+   ]
+  },
+  {
+   "identities": [
+    "IG II^2 216"
+   ],
+   "squeezes": [
+    "IG_II2_216a",
+    "IG_II2_216b"
+   ]
+  },
+  {
+   "identities": [
+    "IG II^2 244"
+   ],
+   "squeezes": [
+    "IG_II2_244bottom_Merged",
+    "IG_II2_244top_Merged"
+   ]
+  },
+  {
+   "identities": [
+    "IG II^2 333"
+   ],
+   "squeezes": [
+    "IG_II2_333a+b",
+    "IG_II2_333c+e"
+   ]
+  },
+  {
+   "identities": [
+    "IG II^2 336"
+   ],
+   "squeezes": [
+    "IG_II2_336a",
+    "IG_II2_336b"
+   ]
+  },
+  {
+   "identities": [
+    "IG II^2 354"
+   ],
+   "squeezes": [
+    "IG_II2_354a",
+    "IG_II2_354b"
+   ]
+  },
+  {
+   "identities": [
+    "IG II^2 414"
+   ],
+   "squeezes": [
+    "IG_II2_414a",
+    "IG_II2_414b_Copy1",
+    "IG_II2_414b_Copy2"
+   ]
+  },
+  {
+   "identities": [
+    "IG II^2 478"
+   ],
+   "squeezes": [
+    "IG_II2_478a",
+    "IG_II2_478b",
+    "IG_II2_478c"
+   ]
+  }
+ ],
+ "trogs26_shared": [
+  {
+   "trogs26": "IAS_27131",
+   "identity": "IG II^2 682",
+   "public224": [
+    "IAS33147"
+   ]
+  }
+ ]
+}

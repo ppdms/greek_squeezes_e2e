@@ -1,0 +1,7 @@
+{
+ "extends": "configs/pagenet_only_style_neural.json",
+ "override": {
+  "name": "style_mild_5_epochs",
+  "description": "The 5-epoch page network trained with each window's relit crops shown as another squeeze might show the same relief (dino.model.relief_style), mild: lights turned up to 30 degrees, gradient components scaled within exp(+-0.2), one of them faded in 30% of the windows, depth 0.6-1.3, blur up to 1 px, noise up to 0.02; every crop moved up to 4% of its side and, with probability 0.15, a rectangle of 3-12% of it flattened."
+ }
+}
